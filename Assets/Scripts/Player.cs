@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityStandardAssets.CrossPlatformInput;
 
 public class Player : MonoBehaviour {
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour {
             Climb();
             Jump();
             FacePlayerTowardsMovement();
+
             Die();
         }
 	}
@@ -99,9 +101,47 @@ public class Player : MonoBehaviour {
 
     private void Die()
     {
+        IsCollidingWithEnemies();
+        IsCollidingWithHazards();
+        IsCollidingWithWater();
+
+        if (!isAlive)
+            StartCoroutine(RevivePlayer());
+    }
+
+    IEnumerator RevivePlayer()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadSceneAsync(0);
+    }
+
+    private void IsCollidingWithEnemies()
+    {
         CapsuleCollider2D playerCollider = GetComponent<CapsuleCollider2D>();
 
         if (playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        {
+            isAlive = false;
+            PlayDeathAnimation();
+        }
+    }
+
+    private void IsCollidingWithHazards()
+    {
+        bool isOnSpikes = GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Spikes"));
+
+        if (isOnSpikes)
+        {
+            isAlive = false;
+            PlayDeathAnimation();
+        }
+    }
+
+    private void IsCollidingWithWater()
+    {
+        bool isInWater = GetComponent<BoxCollider2D>().IsTouchingLayers(LayerMask.GetMask("Waters"));
+
+        if (isInWater)
         {
             isAlive = false;
             PlayDeathAnimation();
@@ -116,8 +156,8 @@ public class Player : MonoBehaviour {
         playerRigidBody.velocity += new Vector2(UnityEngine.Random.Range(1f, 2f), UnityEngine.Random.Range(30f, 100f));
         ChangeStateToDead();
 
-        Destroy(deathVfx, 5f);
-        Destroy(gameObject, 5f);
+        //Destroy(deathVfx, 5f);
+        //Destroy(gameObject, 5f);
     }
 
     private void FacePlayerTowardsMovement()

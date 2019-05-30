@@ -18,9 +18,9 @@ TagManager:
   - Background
   - Player
   - Enemy
-  - 
-  - 
-  - 
+  - Spikes
+  - Waters
+  - Pickups
   - 
   - 
   - 
@@ -47,11 +47,20 @@ TagManager:
   - name: Ladders
     uniqueID: 1937227255
     locked: 0
+  - name: Spikes
+    uniqueID: 51837525
+    locked: 0
   - name: Player
     uniqueID: 2732111055
     locked: 0
+  - name: Pickups
+    uniqueID: 888796035
+    locked: 0
   - name: VFX
     uniqueID: 1239313821
+    locked: 0
+  - name: Water
+    uniqueID: 1326308675
     locked: 0
   - name: Enemy
     uniqueID: 3627025833
